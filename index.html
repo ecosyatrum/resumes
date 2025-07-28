@@ -822,7 +822,341 @@
             font-size: 1.1rem;
             color: var(--secondary-text);
             line-height: 1.7;
+        
         }
+        /*Chatbox Styles */
+  #chatbox-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 350px;
+    height: 500px;
+    background: rgba(30, 30, 40, 0.85);
+    border: 1px solid rgba(123, 143, 255, 0.3);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(20px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+    font-family: 'Source Code Pro', monospace;
+  }
+  
+  #chatbox-container.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .chatbox-header {
+    padding: 15px 20px;
+    background: rgba(18, 18, 40, 0.7);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .chatbox-header h3 {
+    color: var(--primary-text);
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    margin: 0;
+  }
+  
+  #close-chatbox {
+    background: transparent;
+    border: none;
+    color: var(--primary-text);
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+  }
+  
+  #close-chatbox:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  #chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .message {
+    display: flex;
+    gap: 12px;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .bot-message {
+    align-self: flex-start;
+  }
+  
+  .user-message {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+  }
+  
+  .bot-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(123, 143, 255, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 18px;
+  }
+  
+  .message-content {
+    max-width: 75%;
+    padding: 12px 15px;
+    border-radius: 18px;
+    line-height: 1.5;
+    font-size: 0.95rem;
+    position: relative;
+  }
+  
+  .bot-message .message-content {
+    background: rgba(123, 143, 255, 0.15);
+    border-top-left-radius: 5px;
+    color: var(--primary-text);
+  }
+  
+  .user-message .message-content {
+    background: rgba(123, 143, 255, 0.3);
+    border-bottom-right-radius: 5px;
+    color: white;
+  }
+  
+  #chat-input {
+    padding: 15px 20px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+  
+  #user-input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 12px 15px;
+    color: var(--primary-text);
+    font-family: inherit;
+    resize: none;
+    height: 45px;
+    max-height: 150px;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+  
+  #user-input:focus {
+    border-color: rgba(123, 143, 255, 0.7);
+    box-shadow: 0 0 0 2px rgba(123, 143, 255, 0.2);
+  }
+  
+  #send-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(123, 143, 255, 0.3);
+    border: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+  }
+  
+  #send-btn:hover {
+    background: rgba(123, 143, 255, 0.5);
+    transform: scale(1.05);
+  }
+  
+  /* Feedback Form */
+  #feedback-form {
+    padding: 20px;
+    background: rgba(20, 20, 30, 0.7);
+    border-top: 1px solid var(--border-color);
+  }
+  
+  #feedback-form h4 {
+    color: var(--primary-text);
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.1rem;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--secondary-text);
+    font-size: 0.85rem;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px 15px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--primary-text);
+    font-family: inherit;
+  }
+  
+  .form-group textarea {
+    min-height: 80px;
+  }
+  
+  .rating {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .rating span {
+    font-size: 1.5rem;
+    color: var(--secondary-text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .rating span:hover,
+  .rating span.active {
+    color: #ffc107;
+    transform: scale(1.2);
+  }
+  
+  #feedback-form button {
+    width: 100%;
+    padding: 12px;
+    background: rgba(123, 143, 255, 0.3);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-family: inherit;
+    font-weight: 500;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+  }
+  
+  #feedback-form button:hover {
+    background: rgba(123, 143, 255, 0.5);
+  }
+  
+  /* Toggle Button */
+  #chatbox-toggle {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(123, 143, 255, 0.3);
+    border: 1px solid rgba(123, 143, 255, 0.5);
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+  }
+  
+  #chatbox-toggle:hover {
+    background: rgba(123, 143, 255, 0.5);
+    transform: scale(1.1);
+  }
+  
+  .pulse {
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(123, 143, 255, 0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(123, 143, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(123, 143, 255, 0); }
+  }
+  
+  .ai-icon {
+    font-size: 28px;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    #chatbox-container {
+      width: 90%;
+      right: 5%;
+      bottom: 10px;
+      height: 70vh;
+      max-height: 500px;
+    }
+    
+    #chatbox-toggle {
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      font-size: 1.3rem;
+    }
+    
+    .message-content {
+      max-width: 70%;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    #chatbox-container {
+      width: 95%;
+      height: 75vh;
+    }
+    
+    .chatbox-header {
+      padding: 12px 15px;
+    }
+    
+    #chat-messages {
+      padding: 15px;
+    }
+    
+    .message-content {
+      font-size: 0.9rem;
+    }
+  }
         /**SMALL ANIMATION***/
         .loop-wrapper {
             position: relative;
@@ -1492,6 +1826,61 @@ Mirror IX pings no more, but if you trace Port 8080... some echoes Veh jARUR ans
         <h3>🔥 ASURA APPROVED</h3>
     <p>She whispered, "/dev/null may swallow truth, but not the curse of ΛΩ." Shadows listened.</p> </div>
     </section>
+    <!-- Add this code before the closing </body> tag -->
+<div id="chatbox-container">
+  <div class="chatbox-header">
+    <h3>Nox-Atrum AI Assistant</h3>
+    <button id="close-chatbox">✕</button>
+  </div>
+  
+  <div id="chat-messages">
+    <div class="message bot-message">
+      <span class="bot-icon">🕵️</span>
+      <div class="message-content">
+        Greetings, Agent. I'm your Nox-Atrum AI assistant. How can I assist you today?
+      </div>
+    </div>
+  </div>
+  
+  <div id="chat-input">
+    <textarea id="user-input" placeholder="Type your message..."></textarea>
+    <button id="send-btn">↗</button>
+  </div>
+  
+  <div id="feedback-form" class="hidden">
+    <h4>Provide Feedback</h4>
+    <form id="feedback-form-data">
+      <div class="form-group">
+        <label for="feedback-name">Codename</label>
+        <input type="text" id="feedback-name" required>
+      </div>
+      <div class="form-group">
+        <label for="feedback-email">Secure Channel</label>
+        <input type="email" id="feedback-email" required>
+      </div>
+      <div class="form-group">
+        <label for="feedback-message">Encrypted Report</label>
+        <textarea id="feedback-message" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>Mission Status</label>
+        <div class="rating">
+          <span data-value="1">☣️</span>
+          <span data-value="2">☣️</span>
+          <span data-value="3">☣️</span>
+          <span data-value="4">☣️</span>
+          <span data-value="5">☣️</span>
+        </div>
+      </div>
+      <button type="submit">TRANSMIT DATA</button>
+    </form>
+  </div>
+</div>
+
+<button id="chatbox-toggle" class="pulse">
+  <span class="ai-icon">🤖</span>
+</button>
+
     
     <!-- Animation Section -->
     <div class="loop-wrapper">
@@ -2008,6 +2397,179 @@ function doPost(e) {
         });
     });
 });
+      document.addEventListener('DOMContentLoaded', function() {
+    // Elements
+    const chatboxContainer = document.getElementById('chatbox-container');
+    const chatboxToggle = document.getElementById('chatbox-toggle');
+    const closeChatbox = document.getElementById('close-chatbox');
+    const chatMessages = document.getElementById('chat-messages');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+    const feedbackForm = document.getElementById('feedback-form');
+    const feedbackFormData = document.getElementById('feedback-form-data');
+    const ratingStars = document.querySelectorAll('.rating span');
+    
+    // Chatbox visibility
+    let isChatboxOpen = false;
+    
+    chatboxToggle.addEventListener('click', () => {
+      isChatboxOpen = !isChatboxOpen;
+      chatboxContainer.classList.toggle('active', isChatboxOpen);
+      if (isChatboxOpen) {
+        chatboxToggle.classList.remove('pulse');
+      }
+    });
+    
+    closeChatbox.addEventListener('click', () => {
+      isChatboxOpen = false;
+      chatboxContainer.classList.remove('active');
+      chatboxToggle.classList.add('pulse');
+    });
+    
+    // Rating stars
+    let selectedRating = 0;
+    ratingStars.forEach(star => {
+      star.addEventListener('click', () => {
+        selectedRating = parseInt(star.getAttribute('data-value'));
+        ratingStars.forEach(s => s.classList.remove('active'));
+        for (let i = 0; i < selectedRating; i++) {
+          ratingStars[i].classList.add('active');
+        }
+      });
+    });
+    
+    // Add message to chat
+    function addMessage(content, isUser = false) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = message ${isUser ? 'user-message' : 'bot-message'};
+      
+      if (isUser) {
+        messageDiv.innerHTML = `
+          <div class="message-content">${content}</div>
+          <span class="bot-icon">👤</span>
+        `;
+      } else {
+        messageDiv.innerHTML = `
+          <span class="bot-icon">🕵️</span>
+          <div class="message-content">${content}</div>
+        `;
+      }
+      
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    // AI Responses
+    function getAIResponse(userMessage) {
+      userMessage = userMessage.toLowerCase();
+      
+      if (userMessage.includes('hello') || userMessage.includes('hi') || userMessage.includes('hey')) {
+        return "Greetings, Agent. How can I assist with your mission today?";
+      } else if (userMessage.includes('feedback') || userMessage.includes('report')) {
+        // Show feedback form
+        feedbackForm.classList.remove('hidden');
+        return "I've activated the secure feedback transmission protocol. Please fill in the details below.";
+      } else if (userMessage.includes('help')) {
+        return "Available commands:<br>- 'Feedback': Submit a report<br>- 'Website': Info about this portal<br>- 'Contact': Secure communication channels<br>- 'Clear': Reset conversation";
+      } else if (userMessage.includes('website')) {
+        return "This is a secure portal for Nox-Atrum operations. All transmissions are encrypted and monitored for security purposes.";
+      } else if (userMessage.includes('contact')) {
+        return "For secure communications, use:<br>- Encrypted Email: ecosyfom@proton.me<br>- Secure Channel: Port 8080<br>- Dead Drop: Sector XIII, Grid Ω";
+      } else if (userMessage.includes('clear')) {
+        setTimeout(() => {
+          chatMessages.innerHTML = '';
+          addMessage("Conversation history cleared. How may I assist you now?");
+        }, 500);
+        return "Initiating memory wipe protocol...";
+      } else {
+        const responses = [
+          "I'm analyzing your request...",
+          "Accessing encrypted databases...",
+          "Transmission received. Processing...",
+          "That's an interesting perspective. Could you elaborate?",
+          "I've logged your inquiry for further analysis.",
+          "Security protocols require additional context for that request."
+        ];
+        return responses[Math.floor(Math.random() * responses.length)];
+      }
+    }
+    
+    // Send message handler
+    function sendMessage() {
+      const message = userInput.value.trim();
+      if (!message) return;
+      
+      // Add user message
+      addMessage(message, true);
+      userInput.value = '';
+      
+      // Simulate AI thinking
+      setTimeout(() => {
+        const response = getAIResponse(message);
+        addMessage(response);
+      }, 1000);
+    }
+    
+    // Event listeners
+    sendBtn.addEventListener('click', sendMessage);
+    
+    userInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+    
+    // Submit feedback form to Google Sheets
+    feedbackFormData.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('feedback-name').value;
+      const email = document.getElementById('feedback-email').value;
+      const message = document.getElementById('feedback-message').value;
+      
+      if (!name || !email || !message || selectedRating === 0) {
+        addMessage("Please complete all fields in the feedback form.");
+        return;
+      }
+      
+      // Google Apps Script URL (replace with your actual script URL)
+      const scriptURL = '
+
+https://script.google.com/macros/s/AKfycbx9eJU8sOcKmcUcBnSn22DYWnly-GPuSTLMojMfYsrzst40VqR99UEODR2IOr-6L6hcMA/exec';
+      
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('email', email);
+      formData.append('message', message);
+      formData.append('rating', selectedRating);
+      
+      fetch(scriptURL, { 
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (response.ok) {
+          addMessage("Feedback transmission successful. Thank you for your report, Agent.");
+          feedbackFormData.reset();
+          ratingStars.forEach(star => star.classList.remove('active'));
+          selectedRating = 0;
+          feedbackForm.classList.add('hidden');
+        } else {
+          throw new Error('Network response was not ok');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        addMessage("Transmission failed. Please try again or use alternative channels.");
+      });
+    });
+    
+    // Initialize with welcome message
+    setTimeout(() => {
+      addMessage("Security protocols initialized. All communications are encrypted.");
+    }, 1000);
+  });
 </script>
     
 </body>
