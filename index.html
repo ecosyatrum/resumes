@@ -804,6 +804,7 @@
             text-align: center;
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
+            opacity: 1 !important; /* Ensure visibility */
         }
 
         .feature-box:hover {
@@ -824,339 +825,442 @@
             line-height: 1.7;
         
         }
-        /*Chatbox Styles */
+
+/* OPTIONAL Responsive, Clean & Transparent Chatbox Styles */
+:root {
+  --primary-text: #fff;
+  --secondary-text: #ccc;
+  --border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Add this class to properly hide elements */
+.hidden {
+    display: none !important;
+}
+
+/* Optional chatbox container styles */
+#chatbox-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 360px;
+  max-height: 85vh;
+  height: 500px;
+  background: rgba(25, 25, 35, 0.85);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+  display: none; /* Changed from flex to none initially, JS will set to flex */
+  flex-direction: column;
+  z-index: 10000;
+  transform: translateY(20px);
+  opacity: 0; /* Keep opacity for smooth transition */
+  visibility: hidden; /* Keep visibility for smooth transition */
+  transition: all 0.4s ease-in-out;
+  font-family: 'Source Code Pro', monospace;
+}
+
+#chatbox-container.active {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+  display: flex; /* Ensure it becomes flex when active */
+}
+
+/* Optional header */
+.chatbox-header {
+  padding: 15px 20px;
+  background: rgba(15, 15, 30, 0.85);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chatbox-header h3 {
+  color: var(--primary-text);
+  font-size: 1.2rem;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+#close-chatbox {
+  background: transparent;
+  border: none;
+  color: var(--primary-text);
+  font-size: 1.4rem;
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 5px;
+  transition: background 0.3s;
+}
+
+#close-chatbox:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Optional messages */
+#chat-messages {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message {
+  display: flex;
+  gap: 10px;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.user-message {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.bot-message {
+  align-self: flex-start;
+}
+
+.bot-icon {
+  width: 36px;
+  height: 36px;
+  background: rgba(123, 143, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.message-content {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--primary-text);
+}
+
+.user-message .message-content {
+  background: rgba(123, 143, 255, 0.4);
+  border-bottom-right-radius: 4px;
+}
+
+.bot-message .message-content {
+  background: rgba(123, 143, 255, 0.2);
+  border-top-left-radius: 4px;
+}
+
+/* Optional input area */
+#chat-input {
+  padding: 15px 20px;
+  background: rgba(18, 18, 30, 0.7);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#user-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 12px 15px;
+  color: var(--primary-text);
+  resize: none;
+  height: 45px;
+  font-family: inherit;
+  outline: none;
+}
+
+#user-input:focus {
+  border-color: rgba(123, 143, 255, 0.6);
+  box-shadow: 0 0 0 2px rgba(123, 143, 255, 0.15);
+}
+
+#send-btn {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: rgba(123, 143, 255, 0.35);
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s ease;
+}
+
+#send-btn:hover {
+  background: rgba(123, 143, 255, 0.55);
+  transform: scale(1.05);
+}
+
+/* Optional toggle button */
+#chatbox-toggle {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(123, 143, 255, 0.35);
+  border: 1px solid rgba(123, 143, 255, 0.4);
+  color: white;
+  font-size: 1.5rem;
+  display: none; /* Changed from flex to none initially, JS will set to flex */
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s;
+  backdrop-filter: blur(6px);
+}
+
+#chatbox-toggle:hover {
+  background: rgba(123, 143, 255, 0.5);
+  transform: scale(1.1);
+}
+
+/* Feedback form styles (now for the main page section) */
+.feedback-section {
+    padding: 80px 20px;
+    background: var(--light-bg); /* Or a distinct background */
+    color: var(--primary-text);
+    text-align: center;
+    max-width: 800px;
+    margin: 50px auto; /* Center it on the page */
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(4px);
+}
+
+.feedback-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: var(--primary-text);
+    letter-spacing: 2px;
+}
+
+.feedback-section .form-group {
+    margin-bottom: 20px;
+    text-align: left; /* Align labels and inputs to the left */
+}
+
+.feedback-section label {
+    color: var(--secondary-text);
+    font-size: 1rem;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.feedback-section input,
+.feedback-section textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px 15px;
+    color: var(--primary-text);
+    font-family: inherit;
+    outline: none;
+    resize: vertical;
+    font-size: 1rem;
+}
+
+.feedback-section input:focus,
+.feedback-section textarea:focus {
+    border-color: rgba(123, 143, 255, 0.6);
+    box-shadow: 0 0 0 2px rgba(123, 143, 255, 0.15);
+}
+
+.feedback-section .rating {
+    display: flex;
+    gap: 8px;
+    font-size: 1.8rem; /* Larger stars */
+    cursor: pointer;
+    justify-content: center; /* Center the stars */
+    margin-top: 15px;
+}
+
+.feedback-section .rating span {
+    color: var(--secondary-text); /* Default star color */
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.feedback-section .rating span.active,
+.feedback-section .rating span:hover,
+.feedback-section .rating span:hover ~ span {
+    color: #FFD700; /* Gold color for active/hovered stars */
+    transform: scale(1.1);
+}
+
+.feedback-section button[type="submit"] {
+    margin-top: 30px;
+    width: 100%;
+    background: rgba(123, 143, 255, 0.35);
+    color: var(--primary-text);
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 1.1rem;
+    transition: 0.3s ease;
+}
+
+.feedback-section button[type="submit"]:hover {
+    background: rgba(123, 143, 255, 0.55);
+    transform: translateY(-2px);
+}
+
+
+/* Optional animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* Feedback form styles */
+#feedback-form {
+  padding: 15px 20px;
+  background: rgba(50, 50, 70, 0.9); /* Darker background for contrast */
+  border-top: 1px solid var(--border-color);
+  border-radius: 0 0 14px 14px; /* Rounded corners at the bottom */
+  display: none; /* This should remain hidden as it's no longer used for the main feedback */
+}
+
+#feedback-form h4 {
+  color: var(--primary-text);
+  margin-bottom: 15px;
+  font-size: 1.2rem; /* Slightly larger font size */
+  letter-spacing: 1px;
+  text-align: center; /* Centered title */
+}
+
+.form-group {
+  margin-bottom: 15px; /* Increased margin for better spacing */
+}
+
+.form-group label {
+  color: var(--secondary-text);
+  font-size: 0.9rem; /* Slightly larger font size */
+  margin-bottom: 5px;
+  display: block;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1); /* Lighter background for inputs */
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px;
+  color: var(--primary-text);
+  font-family: inherit;
+  outline: none;
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: rgba(123, 143, 255, 0.8); /* Brighter focus border */
+  box-shadow: 0 0 0 2px rgba(123, 143, 255, 0.25); /* Brighter focus shadow */
+}
+
+.rating {
+  display: flex;
+  gap: 5px;
+  font-size: 1.5rem; /* Larger rating icons */
+  cursor: pointer;
+  justify-content: center; /* Center the rating icons */
+}
+
+.rating span:hover,
+.rating span:hover ~ span {
+  transform: scale(1.3); /* Larger hover effect */
+  transition: 0.2s;
+}
+
+#feedback-form-data button[type="submit"] {
+  margin-top: 15px; /* Increased margin for better spacing */
+  width: 100%;
+  background: rgba(123, 143, 255, 0.5); /* Lighter background for submit button */
+  color: var(--primary-text);
+  border: none;
+  padding: 12px; /* Increased padding for a larger button */
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  letter-spacing: 1px;
+  transition: 0.3s ease;
+}
+
+#feedback-form-data button[type="submit"]:hover {
+  background: rgba(123, 143, 255, 0.7); /* Brighter hover background */
+}
+
+/* Optional animations for feedback section */
+@keyframes feedbackFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#feedback-form {
+  animation: feedbackFadeIn 0.3s ease-in; /* Fade-in effect for feedback form */
+}
+
+
+/* Optional responsiveness */
+@media (max-width: 768px) {
   #chatbox-container {
-    position: fixed;
+    width: 90%;
+    right: 5%;
+    bottom: 15px;
+    height: 75vh;
+  }
+
+  #chatbox-toggle {
     bottom: 20px;
     right: 20px;
-    width: 350px;
-    height: 500px;
-    background: rgba(30, 30, 40, 0.85);
-    border: 1px solid rgba(123, 143, 255, 0.3);
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
-    z-index: 10000;
-    display: flex;
-    flex-direction: column;
-    transform: translateY(20px);
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    overflow: hidden;
-    font-family: 'Source Code Pro', monospace;
+    width: 50px;
+    height: 50px;
+    font-size: 1.3rem;
   }
-  
-  #chatbox-container.active {
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
-  }
-  
-  .chatbox-header {
-    padding: 15px 20px;
-    background: rgba(18, 18, 40, 0.7);
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .chatbox-header h3 {
-    color: var(--primary-text);
-    font-size: 1.2rem;
-    letter-spacing: 1px;
-    margin: 0;
-  }
-  
-  #close-chatbox {
-    background: transparent;
-    border: none;
-    color: var(--primary-text);
-    font-size: 1.5rem;
-    cursor: pointer;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-  }
-  
-  #close-chatbox:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-  
-  #chat-messages {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .message {
-    display: flex;
-    gap: 12px;
-    animation: fadeIn 0.3s ease;
-  }
-  
-  .bot-message {
-    align-self: flex-start;
-  }
-  
-  .user-message {
-    align-self: flex-end;
-    flex-direction: row-reverse;
-  }
-  
-  .bot-icon {
-    width: 36px;
-    height: 36px;
-    background: rgba(123, 143, 255, 0.15);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    font-size: 18px;
-  }
-  
+
   .message-content {
-    max-width: 75%;
+    max-width: 80%;
+  }
+}
+
+@media (max-width: 480px) {
+  #chatbox-container {
+    width: 95%;
+    height: 70vh;
+  }
+
+  .chatbox-header {
     padding: 12px 15px;
-    border-radius: 18px;
-    line-height: 1.5;
-    font-size: 0.95rem;
-    position: relative;
   }
-  
-  .bot-message .message-content {
-    background: rgba(123, 143, 255, 0.15);
-    border-top-left-radius: 5px;
-    color: var(--primary-text);
+
+  #chat-messages {
+    padding: 15px;
   }
-  
-  .user-message .message-content {
-    background: rgba(123, 143, 255, 0.3);
-    border-bottom-right-radius: 5px;
-    color: white;
+
+  .message-content {
+    font-size: 0.9rem;
   }
-  
-  #chat-input {
-    padding: 15px 20px;
-    border-top: 1px solid var(--border-color);
-    display: flex;
-    gap: 10px;
-    align-items: flex-end;
-  }
-  
-  #user-input {
-    flex: 1;
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
-    padding: 12px 15px;
-    color: var(--primary-text);
-    font-family: inherit;
-    resize: none;
-    height: 45px;
-    max-height: 150px;
-    outline: none;
-    transition: all 0.3s ease;
-  }
-  
-  #user-input:focus {
-    border-color: rgba(123, 143, 255, 0.7);
-    box-shadow: 0 0 0 2px rgba(123, 143, 255, 0.2);
-  }
-  
-  #send-btn {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    background: rgba(123, 143, 255, 0.3);
-    border: none;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    flex-shrink: 0;
-  }
-  
-  #send-btn:hover {
-    background: rgba(123, 143, 255, 0.5);
-    transform: scale(1.05);
-  }
-  
-  /* Feedback Form */
-  #feedback-form {
-    padding: 20px;
-    background: rgba(20, 20, 30, 0.7);
-    border-top: 1px solid var(--border-color);
-  }
-  
-  #feedback-form h4 {
-    color: var(--primary-text);
-    margin-top: 0;
-    margin-bottom: 20px;
-    text-align: center;
-    font-size: 1.1rem;
-  }
-  
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    color: var(--secondary-text);
-    font-size: 0.85rem;
-  }
-  
-  .form-group input,
-  .form-group textarea {
-    width: 100%;
-    padding: 10px 15px;
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    color: var(--primary-text);
-    font-family: inherit;
-  }
-  
-  .form-group textarea {
-    min-height: 80px;
-  }
-  
-  .rating {
-    display: flex;
-    gap: 5px;
-  }
-  
-  .rating span {
-    font-size: 1.5rem;
-    color: var(--secondary-text);
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  
-  .rating span:hover,
-  .rating span.active {
-    color: #ffc107;
-    transform: scale(1.2);
-  }
-  
-  #feedback-form button {
-    width: 100%;
-    padding: 12px;
-    background: rgba(123, 143, 255, 0.3);
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-family: inherit;
-    font-weight: 500;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 10px;
-  }
-  
-  #feedback-form button:hover {
-    background: rgba(123, 143, 255, 0.5);
-  }
-  
-  /* Toggle Button */
-  #chatbox-toggle {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: rgba(123, 143, 255, 0.3);
-    border: 1px solid rgba(123, 143, 255, 0.5);
-    color: white;
-    font-size: 1.5rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
-  }
-  
-  #chatbox-toggle:hover {
-    background: rgba(123, 143, 255, 0.5);
-    transform: scale(1.1);
-  }
-  
-  .pulse {
-    animation: pulse 2s infinite;
-  }
-  
-  @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(123, 143, 255, 0.4); }
-    70% { box-shadow: 0 0 0 15px rgba(123, 143, 255, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(123, 143, 255, 0); }
-  }
-  
-  .ai-icon {
-    font-size: 28px;
-  }
-  
-  .hidden {
-    display: none;
-  }
-  
-  /* Responsive Styles */
-  @media (max-width: 768px) {
-    #chatbox-container {
-      width: 90%;
-      right: 5%;
-      bottom: 10px;
-      height: 70vh;
-      max-height: 500px;
-    }
-    
-    #chatbox-toggle {
-      bottom: 20px;
-      right: 20px;
-      width: 50px;
-      height: 50px;
-      font-size: 1.3rem;
-    }
-    
-    .message-content {
-      max-width: 70%;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    #chatbox-container {
-      width: 95%;
-      height: 75vh;
-    }
-    
-    .chatbox-header {
-      padding: 12px 15px;
-    }
-    
-    #chat-messages {
-      padding: 15px;
-    }
-    
-    .message-content {
-      font-size: 0.9rem;
-    }
-  }
+}
+
+      
         /**SMALL ANIMATION***/
         .loop-wrapper {
             position: relative;
@@ -1819,67 +1923,42 @@ Mirror IX pings no more, but if you trace Port 8080... some echoes Veh jARUR ans
         <p>OnSystem date: MMXXIV:V:XIII — Jahaan exploit nahi milta, wahan glitch khud ban jata hoon.</p>
     </div>
     <div class="feature-box">
-        <h3></h3>👁️ NAZAR BATTLEFIELD</h3>
+        <h3>👁️ NAZAR BATTLEFIELD</h3>
     <p>dev/null ne sab kuch liya, par ΛΩ ko trigger karne ke liye tujhe XIII bar tunnel se guzarna padega — bina kisi echo ke.</p>
     </div>
     <div class="feature-box">
         <h3>🔥 ASURA APPROVED</h3>
     <p>She whispered, "/dev/null may swallow truth, but not the curse of ΛΩ." Shadows listened.</p> </div>
     </section>
-    <!-- Add this code before the closing </body> tag -->
-<div id="chatbox-container">
-  <div class="chatbox-header">
-    <h3>Nox-Atrum AI Assistant</h3>
-    <button id="close-chatbox">✕</button>
-  </div>
-  
-  <div id="chat-messages">
-    <div class="message bot-message">
-      <span class="bot-icon">🕵️</span>
-      <div class="message-content">
-        Greetings, Agent. I'm your Nox-Atrum AI assistant. How can I assist you today?
+
+
+    <!-- AI Chatbox (remains the same, but feedback form is removed from inside it) -->
+    <div id="chatbox-container">
+      <div class="chatbox-header">
+        <h3>Nox-Atrum AI Assistant</h3>
+        <button id="close-chatbox">✕</button>
       </div>
-    </div>
-  </div>
-  
-  <div id="chat-input">
-    <textarea id="user-input" placeholder="Type your message..."></textarea>
-    <button id="send-btn">↗</button>
-  </div>
-  
-  <div id="feedback-form" class="hidden">
-    <h4>Provide Feedback</h4>
-    <form id="feedback-form-data">
-      <div class="form-group">
-        <label for="feedback-name">Codename</label>
-        <input type="text" id="feedback-name" required>
-      </div>
-      <div class="form-group">
-        <label for="feedback-email">Secure Channel</label>
-        <input type="email" id="feedback-email" required>
-      </div>
-      <div class="form-group">
-        <label for="feedback-message">Encrypted Report</label>
-        <textarea id="feedback-message" required></textarea>
-      </div>
-      <div class="form-group">
-        <label>Mission Status</label>
-        <div class="rating">
-          <span data-value="1">☣️</span>
-          <span data-value="2">☣️</span>
-          <span data-value="3">☣️</span>
-          <span data-value="4">☣️</span>
-          <span data-value="5">☣️</span>
+      
+      <div id="chat-messages">
+        <div class="message bot-message">
+          <span class="bot-icon">🕵️</span>
+          <div class="message-content">
+            Greetings, Agent. I'm your Nox-Atrum AI assistant. How can I assist you today?
+          </div>
         </div>
       </div>
-      <button type="submit">TRANSMIT DATA</button>
-    </form>
-  </div>
-</div>
+      
+      <div id="chat-input">
+        <textarea id="user-input" placeholder="Type your message..."></textarea>
+        <button id="send-btn">↗</button>
+      </div>
+      
+      <!-- The feedback form is REMOVED from here -->
+    </div>
 
-<button id="chatbox-toggle" class="pulse">
-  <span class="ai-icon">🤖</span>
-</button>
+    <button id="chatbox-toggle" class="pulse">
+      <span class="ai-icon">🤖</span>
+    </button>
 
     
     <!-- Animation Section -->
@@ -1941,27 +2020,7 @@ Mirror IX pings no more, but if you trace Port 8080... some echoes Veh jARUR ans
   </form>
 </div>
           
-    <script>
-  document.getElementById("contact-form").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const formData = new FormData(this);
-
-    fetch("https://script.google.com/macros/s/AKfycby-fCSJmMIhKJ8duHlwX_oOry9O70S6W0taB8HUbQGV-ED_Gf5DTdIzEXUw94JOvGTj9A/exec", {
-      method: "POST",
-      body: formData
-    })
-    .then(() => {
-      alert("Message sent successfully! Dil pe taqdeer ho gaya hai jald hi milenge.");
-      this.reset();
-    })
-    .catch(error => {
-      console.error("Error:", error);
-      alert("There was a problem sending your message.  mujhe lagta hai aapko padhne ki jarurat hai jyada jao education pura karo.");
-    });
-  });
-</script>
-
+    
           <div class="social-box">
                 <h3><i class="fas fa-link"></i> Stay Connected</h3>
                 <div class="social-links">
@@ -1974,6 +2033,35 @@ Mirror IX pings no more, but if you trace Port 8080... some echoes Veh jARUR ans
         </div>
     </div>
 
+    <!-- New Feedback Section on Main Page -->
+    <section class="feedback-section" id="feedback-section">
+        <h2>Provide Feedback</h2>
+        <form id="main-feedback-form">
+            <div class="form-group">
+                <label for="main-feedback-name">Codename</label>
+                <input type="text" id="main-feedback-name" required>
+            </div>
+            <div class="form-group">
+                <label for="main-feedback-email">Secure Channel</label>
+                <input type="email" id="main-feedback-email" required>
+            </div>
+            <div class="form-group">
+                <label for="main-feedback-message">Encrypted Report</label>
+                <textarea id="main-feedback-message" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Mission Status</label>
+                <div class="rating" id="main-feedback-rating">
+                    <span data-value="1">☣️</span>
+                    <span data-value="2">☣️</span>
+                    <span data-value="3">☣️</span>
+                    <span data-value="4">☣️</span>
+                    <span data-value="5">☣️</span>
+                </div>
+            </div>
+            <button type="submit">TRANSMIT DATA</button>
+        </form>
+    </section>
     
         
     <!-- Footer -->
@@ -2005,9 +2093,13 @@ Mirror IX pings no more, but if you trace Port 8080... some echoes Veh jARUR ans
     const typingText = document.getElementById('typing-text');
     const boat = document.querySelector('.boat');
     const body = document.body;
+    const chatboxContainer = document.getElementById('chatbox-container');
+    const chatboxToggle = document.getElementById('chatbox-toggle');
 
     // Disable scrolling during loader
     body.style.overflow = 'hidden';
+
+    // Ensure chatbox and toggle are visible after loader
 
     // Show navbar
     navbar.classList.add("show");
@@ -2030,7 +2122,7 @@ Mirror IX pings no more, but if you trace Port 8080... some echoes Veh jARUR ans
 
     let currentMessage = 0;
     let progress = 0;
-    const totalDuration = messages.reduce((sum, msg) => sum + msg.duration, 0);
+    const totalLoaderTypingDuration = messages.reduce((sum, msg) => sum + msg.duration, 0);
 
     // Function to update loader messages
     function updateLoaderMessage() {
@@ -2041,15 +2133,20 @@ Mirror IX pings no more, but if you trace Port 8080... some echoes Veh jARUR ans
             if (currentMessage < messages.length) {
                 setTimeout(updateLoaderMessage, messages[currentMessage-1].duration);
             } else {
+                // Last message, then hide loader
                 setTimeout(() => {
                     gsap.to(loader, {
                         opacity: 0,
                         duration: 0.8,
                         onComplete: () => {
                             loader.style.display = "none";
-                            // Re-enable scrolling when loader completes
                             body.style.overflow = 'auto';
                             initAllAnimations();
+                            // Show chatbox and toggle button after loader is gone
+                            chatboxContainer.style.display = 'flex';
+                            chatboxToggle.style.display = 'flex';
+                            // Add initial welcome message to chatbox after it's visible
+                            addInitialChatboxMessage(); // New function call
                         }
                     });
                 }, messages[currentMessage-1].duration);
@@ -2062,14 +2159,15 @@ Mirror IX pings no more, but if you trace Port 8080... some echoes Veh jARUR ans
 
     // Progress bar animation
     const progressInterval = setInterval(() => {
-        progress += 100 / (totalDuration / 100);
-        progressBar.style.width = `${Math.min(progress, 100)}%`;
+        progress = Math.min(progress + (100 / (totalLoaderTypingDuration / 100)), 100);
+        progressBar.style.width = `${progress}%`;
         
         if (progress >= 100) {
             clearInterval(progressInterval);
         }
     }, 100);
-    // Fallback in case loader gets stuck
+
+    // Fallback in case loader gets stuck (e.g., JS error)
     setTimeout(() => {
         if (loader.style.display !== "none") {
             gsap.to(loader, {
@@ -2077,13 +2175,16 @@ Mirror IX pings no more, but if you trace Port 8080... some echoes Veh jARUR ans
                 duration: 0.8,
                 onComplete: () => {
                     loader.style.display = "none";
-                    // Re-enable scrolling if loader gets stuck
                     body.style.overflow = 'auto';
                     initAllAnimations();
+                    // Show chatbox and toggle button even if fallback is triggered
+                    chatboxContainer.style.display = 'flex';
+                    chatboxToggle.style.display = 'flex';
+                    addInitialChatboxMessage(); // New function call
                 }
             });
         }
-    }, totalDuration + 2000);
+    }, totalLoaderTypingDuration + 1000); // Give it an extra second after expected completion
 
     // Hamburger Toggle
     hamburger.addEventListener("click", () => {
@@ -2098,21 +2199,19 @@ Mirror IX pings no more, but if you trace Port 8080... some echoes Veh jARUR ans
 
     // GSAP Register
     gsap.registerPlugin(ScrollTrigger);
-function doPost(e) {
-  var sheet = SpreadsheetApp.openById("YOUR_SHEET_ID").getSheetByName("Form Responses");
 
-  sheet.appendRow([
-    new Date(),
-    e.parameter.name,
-    e.parameter.email,
-    e.parameter.phone,
-    e.parameter.message
-  ]);
+    // Google Apps Script placeholder function (already present, just ensuring it's not causing issues)
+    function doPost(e) {
+      // This function is for Google Apps Script, not directly executed in the browser.
+      // It's fine to leave it as is, but ensure the actual script URL is correct in the fetch call.
+    }
 
-  return ContentService.createTextOutput("Success").setMimeType(ContentService.MimeType.TEXT);
-}
-    // Initialize all animations
+    // Initialize all animations and force features to be visible
     function initAllAnimations() {
+        document.querySelectorAll('.feature-box').forEach(box => {
+            box.style.opacity = '1';
+        });
+        console.log("initAllAnimations called."); // Debugging line
         // Hero section animation
         gsap.from(".main-content h1", {
             scrollTrigger: {
@@ -2242,21 +2341,20 @@ function doPost(e) {
             ease: "power2.out"
         });
 
-        // Features section - fixed animation
+        // Features section - improved animation with stagger
         const featureBoxes = gsap.utils.toArray(".feature-box");
-        featureBoxes.forEach((box, i) => {
-            gsap.from(box, {
-                scrollTrigger: {
-                    trigger: ".features",
-                    start: "top 80%",
-                    toggleActions: "play none none none"
-                },
-                y: 100,
-                opacity: 0,
-                duration: 0.8,
-                delay: i * 0.15,
-                ease: "power2.out"
-            });
+        console.log("Feature Boxes found:", featureBoxes.length); // Debugging line
+        gsap.from(featureBoxes, {
+            scrollTrigger: {
+                trigger: ".features",
+                start: "top 75%", // Adjusted start for better visibility
+                toggleActions: "play none none none"
+            },
+            y: 100,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.2, // Added stagger for a nicer effect
+            ease: "power2.out"
         });
 
         // About section
@@ -2365,7 +2463,7 @@ function doPost(e) {
         });
     });
 
-    // Contact form submission
+    // Contact form submission (This is for the sidebar contact form)
     document.getElementById("contact-form")?.addEventListener("submit", function(e) {
         e.preventDefault();
 
@@ -2388,12 +2486,12 @@ function doPost(e) {
             body: JSON.stringify(formData)
         })
         .then(() => {
-            alert('Message sent successfully! We will contact you soon.');
+            alert('Message sent successfully! Dil pe taqdeer ho gaya hai jald hi milenge.');
             this.reset();
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('There was a problem sending your message. Please try again later.');
+            alert('There was a problem sending your message.  mujhe lagta hai aapko padhne ki jarurat hai jyada jao education pura karo.');
         });
     });
 });
@@ -2405,10 +2503,12 @@ function doPost(e) {
     const chatMessages = document.getElementById('chat-messages');
     const userInput = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
-    const feedbackForm = document.getElementById('feedback-form');
-    const feedbackFormData = document.getElementById('feedback-form-data');
-    const ratingStars = document.querySelectorAll('.rating span');
     
+    // New feedback form elements
+    const mainFeedbackForm = document.getElementById('main-feedback-form');
+    const mainFeedbackRatingStars = document.querySelectorAll('#main-feedback-rating span');
+    let mainSelectedRating = 0; // Separate rating variable for the main form
+
     // Chatbox visibility
     let isChatboxOpen = false;
     
@@ -2426,14 +2526,13 @@ function doPost(e) {
       chatboxToggle.classList.add('pulse');
     });
     
-    // Rating stars
-    let selectedRating = 0;
-    ratingStars.forEach(star => {
+    // Rating stars for the MAIN feedback form
+    mainFeedbackRatingStars.forEach(star => {
       star.addEventListener('click', () => {
-        selectedRating = parseInt(star.getAttribute('data-value'));
-        ratingStars.forEach(s => s.classList.remove('active'));
-        for (let i = 0; i < selectedRating; i++) {
-          ratingStars[i].classList.add('active');
+        mainSelectedRating = parseInt(star.getAttribute('data-value'));
+        mainFeedbackRatingStars.forEach(s => s.classList.remove('active'));
+        for (let i = 0; i < mainSelectedRating; i++) {
+          mainFeedbackRatingStars[i].classList.add('active');
         }
       });
     });
@@ -2441,7 +2540,7 @@ function doPost(e) {
     // Add message to chat
     function addMessage(content, isUser = false) {
       const messageDiv = document.createElement('div');
-      messageDiv.className = message ${isUser ? 'user-message' : 'bot-message'};
+      messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
       
       if (isUser) {
         messageDiv.innerHTML = `
@@ -2458,19 +2557,22 @@ function doPost(e) {
       chatMessages.appendChild(messageDiv);
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
+
+    // Function to add initial welcome message to chatbox
+    function addInitialChatboxMessage() {
+        // Clear existing messages first if any from previous loads
+        chatMessages.innerHTML = ''; 
+        addMessage("Greetings, Agent. I'm your Nox-Atrum AI assistant. How can I assist with your mission today?");
+    }
     
-    // AI Responses
+    // AI Responses (removed feedback specific logic as it's now a separate section)
     function getAIResponse(userMessage) {
       userMessage = userMessage.toLowerCase();
       
       if (userMessage.includes('hello') || userMessage.includes('hi') || userMessage.includes('hey')) {
         return "Greetings, Agent. How can I assist with your mission today?";
-      } else if (userMessage.includes('feedback') || userMessage.includes('report')) {
-        // Show feedback form
-        feedbackForm.classList.remove('hidden');
-        return "I've activated the secure feedback transmission protocol. Please fill in the details below.";
       } else if (userMessage.includes('help')) {
-        return "Available commands:<br>- 'Feedback': Submit a report<br>- 'Website': Info about this portal<br>- 'Contact': Secure communication channels<br>- 'Clear': Reset conversation";
+        return "Available commands:<br>- 'Website': Info about this portal<br>- 'Contact': Secure communication channels<br>- 'Clear': Reset conversation";
       } else if (userMessage.includes('website')) {
         return "This is a secure portal for Nox-Atrum operations. All transmissions are encrypted and monitored for security purposes.";
       } else if (userMessage.includes('contact')) {
@@ -2520,29 +2622,27 @@ function doPost(e) {
       }
     });
     
-    // Submit feedback form to Google Sheets
-    feedbackFormData.addEventListener('submit', function(e) {
+    // Submit MAIN feedback form to Google Sheets
+    mainFeedbackForm.addEventListener('submit', function(e) {
       e.preventDefault();
       
-      const name = document.getElementById('feedback-name').value;
-      const email = document.getElementById('feedback-email').value;
-      const message = document.getElementById('feedback-message').value;
+      const name = document.getElementById('main-feedback-name').value;
+      const email = document.getElementById('main-feedback-email').value;
+      const message = document.getElementById('main-feedback-message').value;
       
-      if (!name || !email || !message || selectedRating === 0) {
-        addMessage("Please complete all fields in the feedback form.");
+      if (!name || !email || !message || mainSelectedRating === 0) {
+        alert("Please complete all fields and select a mission status in the feedback form.");
         return;
       }
       
       // Google Apps Script URL (replace with your actual script URL)
-      const scriptURL = '
-
-https://script.google.com/macros/s/AKfycbx9eJU8sOcKmcUcBnSn22DYWnly-GPuSTLMojMfYsrzst40VqR99UEODR2IOr-6L6hcMA/exec';
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbx8yUCI8BOidFk2JwHdYXXbf3EZ1uFhaijyThRXKg9QXgMvZ2EnrXZyUKv_-yWxfztt2A/exec'; // Ensure this is the correct URL for feedback
       
       const formData = new FormData();
       formData.append('name', name);
       formData.append('email', email);
       formData.append('message', message);
-      formData.append('rating', selectedRating);
+      formData.append('rating', mainSelectedRating);
       
       fetch(scriptURL, { 
         method: 'POST',
@@ -2550,25 +2650,21 @@ https://script.google.com/macros/s/AKfycbx9eJU8sOcKmcUcBnSn22DYWnly-GPuSTLMojMfY
       })
       .then(response => {
         if (response.ok) {
-          addMessage("Feedback transmission successful. Thank you for your report, Agent.");
-          feedbackFormData.reset();
-          ratingStars.forEach(star => star.classList.remove('active'));
-          selectedRating = 0;
-          feedbackForm.classList.add('hidden');
+          alert("Feedback transmission successful. Thank you for your report, Agent.");
+          mainFeedbackForm.reset();
+          mainFeedbackRatingStars.forEach(star => star.classList.remove('active'));
+          mainSelectedRating = 0;
         } else {
           throw new Error('Network response was not ok');
         }
       })
       .catch(error => {
         console.error('Error:', error);
-        addMessage("Transmission failed. Please try again or use alternative channels.");
+        alert("Transmission failed. Please try again or use alternative channels.");
       });
     });
     
-    // Initialize with welcome message
-    setTimeout(() => {
-      addMessage("Security protocols initialized. All communications are encrypted.");
-    }, 1000);
+    // Initial welcome message for chatbox is now called after loader hides.
   });
 </script>
     
